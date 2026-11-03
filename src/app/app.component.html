@@ -3,12 +3,15 @@
 
   <section class="card">
     <h2>Filtres de cerca</h2>
-    <app-task-filter></app-task-filter>
+    <app-task-filter
+      (filterChange)="onFilterChange($event)"
+      (reset)="onResetFilter()">
+    </app-task-filter>
   </section>
 
   <section class="card">
-    <h2>Llistat de Tasques ({{ tasks.length }})</h2>
-    <app-task-list [tasks]="tasks" (selectTask)="handleTaskSelected($event)"></app-task-list>
+    <h2>Llistat de Tasques ({{ filteredTasks.length }})</h2>
+    <app-task-list [tasks]="filteredTasks" (selectTask)="handleTaskSelected($event)"></app-task-list>
   </section>
 
   @if (selectedTask) {

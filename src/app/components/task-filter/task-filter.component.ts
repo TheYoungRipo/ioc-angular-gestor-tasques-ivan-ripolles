@@ -6,12 +6,37 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-task-filter',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  template: `
-  <div class="filter-box">
-  <p>Barra de filtres (pròximament funcional amb FormsModule a l'Exercici 3)</p>
-  </div>
-  `,
+  templateUrl: './task-filter.component.html',
   styleUrl: './task-filter.component.scss'
 })
 export class TaskFilterComponent {
+  searchText: string = '';
+  selectedCategory: string = '';
+
+  categories: string[] = [
+    'Desenvolupament',
+    'Formularis',
+    'Optimització',
+    'Qualitat',
+    'Documentació',
+    'Disseny',
+    'Accessibilitat',
+    'Lliurament'
+  ];
+
+  @Output() filterChange = new EventEmitter<{ text: string; category: string }>();
+  @Output() reset = new EventEmitter<void>();
+
+  onApplyFilter() {
+    this.filterChange.emit({
+      text: this.searchText,
+      category: this.selectedCategory
+    });
+  }
+
+  onResetFilter() {
+    this.searchText = '';
+    this.selectedCategory = '';
+    this.reset.emit();
+  }
 }

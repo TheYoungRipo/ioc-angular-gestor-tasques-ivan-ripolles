@@ -1,0 +1,47 @@
+<form #filterForm="ngForm" (ngSubmit)="onApplyFilter()" class="filter-form">
+  <div class="form-group">
+    <label for="searchText">Cercar per text:</label>
+    <input
+      type="text"
+      id="searchText"
+      name="searchText"
+      [(ngModel)]="searchText"
+      required
+      minlength="2"
+      #searchModel="ngModel"
+      placeholder="Escriu mínim 2 caràcters..."
+    >
+    @if (searchModel.invalid && (searchModel.dirty || searchModel.touched)) {
+      <div class="error-message" role="alert">
+        @if (searchModel.errors?.['required']) {
+          <span>El camp de cerca és obligatori.</span>
+        }
+        @if (searchModel.errors?.['minlength']) {
+          <span>El text ha de tenir com a mínim 2 caràcters.</span>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="form-group">
+    <label for="category">Categoria:</label>
+    <select
+      id="category"
+      name="category"
+      [(ngModel)]="selectedCategory">
+      <option value="">Totes les categories</option>
+      @for (cat of categories; track cat) {
+        <option [value]="cat">{{ cat }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" [disabled]="filterForm.invalid" class="btn-primary">
+      Aplicar Filtres
+    </button>
+    <button type="button" (click)="onResetFilter()" class="btn-secondary">
+      Restablir
+    </button>
+  </div>
+</form>
