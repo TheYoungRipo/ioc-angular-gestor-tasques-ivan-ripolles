@@ -4,7 +4,7 @@
 Ivan Ripolles Cervera
 
 ## Descripció
-Aplicació web desenvolupada amb Angular per a gestionar les tasques diàries de manera eficient.
+Aplicació web desenvolupada amb Angular per a gestionar les tasques diàries, filtrar per text i categoria, i veure el detall de les tasques seleccionades.
 
 ## Versions utilitzades
 - Node.js: 24.21.0
@@ -21,10 +21,20 @@ Aplicació web desenvolupada amb Angular per a gestionar les tasques diàries de
 
 L'aplicació estarà accessible a `http://localhost:4200`.
 
-## Estat de l'EAC1
+## Branca de treball
 
-Completat i publicat a la branca `ra1-setup`.
+Aquesta entrega es desenvolupa sobre la branca ra2-components.
 
+## Components creats
+
+    TaskBadgeComponent: Subcomponent d'etiqueta per mostrar la categoria.
+
+    TaskCardComponent: Targeta que resumeix la informació d'una tasca (@Input) i n'emet la selecció (@Output).
+
+    TaskListComponent: Llistat iteratiu de tasques utilitzant la sintaxi @for (...; track ...) i @empty.
+
+    TaskFilterComponent: Formulari de cerca i filtratge combinat utilitzant FormsModule i [(ngModel)].
+    
 ## Enllaç del repositori
 
 https://github.com/TheYoungRipo/ioc-angular-gestor-tasques-ivan-ripolles
