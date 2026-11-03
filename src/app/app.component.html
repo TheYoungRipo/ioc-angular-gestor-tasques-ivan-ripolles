@@ -15,11 +15,13 @@
   </section>
 
   @if (selectedTask) {
-    <aside class="note">
+    <aside class="note" role="status" aria-live="polite">
       <h2>Detall de la tasca seleccionada</h2>
       <p><strong>Títol:</strong> {{ selectedTask.titol }}</p>
       <p><strong>Descripció:</strong> {{ selectedTask.descripcio }}</p>
       <p><strong>Categoria:</strong> {{ selectedTask.categoria }}</p>
+      <p><strong>Data:</strong> {{ selectedTask.data | date:'fullDate' }}</p>
+      <p><strong>Hores estimades:</strong> {{ selectedTask.hores }} hores</p>
     </aside>
   }
 </main>

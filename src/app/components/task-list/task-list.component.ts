@@ -11,6 +11,10 @@ import { TaskCardComponent } from '../task-card/task-card.component';
   <div class="task-list">
   @for (task of tasks; track task.id) {
     <app-task-card [task]="task" (taskSelected)="onTaskSelected($event)"></app-task-card>
+  } @empty {
+    <div class="empty-state" role="status">
+    <p>No s'ha trobat cap tasca amb els criteris de cerca seleccionats.</p>
+    </div>
   }
   </div>
   `,

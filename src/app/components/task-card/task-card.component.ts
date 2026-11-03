@@ -15,7 +15,7 @@ import { TaskBadgeComponent } from '../task-badge/task-badge.component';
   </div>
   <p>{{ task.descripcio }}</p>
   <div class="card-footer">
-  <span>📅 {{ task.data }}</span>
+  <span>📅 {{ task.data | date:'dd/MM/yyyy' }}</span>
   <span>⏱️ {{ task.hores }} hores</span>
   </div>
   </div>
