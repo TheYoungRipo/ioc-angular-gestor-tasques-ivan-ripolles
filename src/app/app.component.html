@@ -1,16 +1,18 @@
-<main class="main-container">
+<a href="#main-content" class="skip-link">Saltar al contingut principal</a>
+
+<main id="main-content" class="main-container">
   <h1>{{ appName }}</h1>
 
-  <section class="card">
-    <h2>Filtres de cerca</h2>
+  <section class="card" aria-labelledby="filters-title">
+    <h2 id="filters-title">Filtres de cerca</h2>
     <app-task-filter
       (filterChange)="onFilterChange($event)"
       (reset)="onResetFilter()">
     </app-task-filter>
   </section>
 
-  <section class="card">
-    <h2>Llistat de Tasques ({{ filteredTasks.length }})</h2>
+  <section class="card" aria-labelledby="list-title">
+    <h2 id="list-title">Llistat de Tasques ({{ filteredTasks.length }})</h2>
     <app-task-list [tasks]="filteredTasks" (selectTask)="handleTaskSelected($event)"></app-task-list>
   </section>
 
