@@ -3,6 +3,7 @@ export interface Task {
   titol: string;
   descripcio: string;
   categoria: string;
+  estat: string;
   data: string;
   hores: number;
   destacada?: boolean;
