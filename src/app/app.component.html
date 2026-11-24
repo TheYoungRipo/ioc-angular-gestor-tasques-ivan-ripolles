@@ -1,29 +1,77 @@
-<a href="#main-content" class="skip-link">Saltar al contingut principal</a>
+<div class="app-container">
+  <header class="app-header">
+    <h1>Gestor de Tasques · EAC3</h1>
+    <p class="subtitle">DA2_OA01 · HTTP, RxJS, formularis reactius i normalització de dades</p>
+  </header>
 
-<main id="main-content" class="main-container">
-  <h1>{{ appName }}</h1>
+  <main class="app-main">
+    <section class="filter-section">
+      <h2>Filtres i cerca</h2>
+      <app-task-filter
+        (filterChange)="onFilterChange($event)"
+        (reset)="onResetFilter()"
+        (taskCreated)="onTaskCreated()"
+      />
+    </section>
 
-  <section class="card" aria-labelledby="filters-title">
-    <h2 id="filters-title">Filtres de cerca</h2>
-    <app-task-filter
-      (filterChange)="onFilterChange($event)"
-      (reset)="onResetFilter()">
-    </app-task-filter>
-  </section>
+    @if (errorMessage) {
+      <div class="error-banner" role="alert">
+        <p>{{ errorMessage }}</p>
+        <button type="button" (click)="onRetry()" class="btn-retry">
+          Reintentar
+        </button>
+      </div>
+    }
 
-  <section class="card" aria-labelledby="list-title">
-    <h2 id="list-title">Llistat de Tasques ({{ filteredTasks.length }})</h2>
-    <app-task-list [tasks]="filteredTasks" (selectTask)="handleTaskSelected($event)"></app-task-list>
-  </section>
+    @if (isLoading) {
+      <div class="loading-box" role="status" aria-live="polite">
+        Carregant tasques des de l'API...
+      </div>
+    } @else {
+      <section class="results-section">
+        <div class="results-header">
+          <h2>Tasques ({{ tasks.length }})</h2>
+        </div>
 
-  @if (selectedTask) {
-    <aside class="note" role="status" aria-live="polite">
-      <h2>Detall de la tasca seleccionada</h2>
-      <p><strong>Títol:</strong> {{ selectedTask.titol }}</p>
-      <p><strong>Descripció:</strong> {{ selectedTask.descripcio }}</p>
-      <p><strong>Categoria:</strong> {{ selectedTask.categoria }}</p>
-      <p><strong>Data:</strong> {{ selectedTask.data | date:'fullDate' }}</p>
-      <p><strong>Hores estimades:</strong> {{ selectedTask.hores }} hores</p>
-    </aside>
-  }
-</main>
+        @if (tasks.length === 0) {
+          <p class="empty-state">No hi ha tasques que coincideixin amb els criteris actuals.</p>
+        } @else {
+          <ul class="task-list">
+            @for (task of tasks; track task.id) {
+              <li
+                class="task-card"
+                [class.selected]="selectedTask?.id === task.id"
+                (click)="selectTask(task)"
+              >
+                <div class="task-card-top">
+                  <span class="task-title">{{ task.titol }}</span>
+                  <span class="task-category">{{ task.categoria }}</span>
+                </div>
+                <p class="task-desc">{{ task.descripcio }}</p>
+                <div class="task-meta">
+                  <span>Data: {{ task.data }}</span>
+                  <span>Hores: {{ task.hores }}h</span>
+                  @if (task.destacada) {
+                    <span class="badge-featured">Destacada</span>
+                  }
+                </div>
+              </li>
+            }
+          </ul>
+        }
+      </section>
+    }
+
+    @if (selectedTask) {
+      <aside class="detail-panel">
+        <h3>Detall de la tasca seleccionada</h3>
+        <p><strong>ID:</strong> {{ selectedTask.id }}</p>
+        <p><strong>Títol:</strong> {{ selectedTask.titol }}</p>
+        <p><strong>Descripció:</strong> {{ selectedTask.descripcio }}</p>
+        <p><strong>Categoria:</strong> {{ selectedTask.categoria }}</p>
+        <p><strong>Data límit:</strong> {{ selectedTask.data }}</p>
+        <p><strong>Hores estimades:</strong> {{ selectedTask.hores }}h</p>
+      </aside>
+    }
+  </main>
+</div>

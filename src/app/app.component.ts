@@ -1,38 +1,59 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Task } from './models/task.model';
-import { TASKS_MOCK } from './data/tasks.mock';
-import { TaskListComponent } from './components/task-list/task-list.component';
 import { TaskFilterComponent } from './components/task-filter/task-filter.component';
+import { Task } from './models/task.model';
+import { SearchCriteria, TaskService } from './services/task.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, TaskListComponent, TaskFilterComponent],
+  imports: [CommonModule, TaskFilterComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
-  appName = 'Gestor de tasques';
-  tasks: Task[] = TASKS_MOCK;
-  filteredTasks: Task[] = TASKS_MOCK;
+export class AppComponent implements OnInit {
+  private taskService = inject(TaskService);
+
+  tasks: Task[] = [];
   selectedTask: Task | null = null;
+  isLoading = false;
+  errorMessage: string | null = null;
 
-  handleTaskSelected(task: Task) {
-    this.selectedTask = task;
-  }
+  ngOnInit(): void {
+    this.taskService.tasks$.subscribe((list) => {
+      this.tasks = list;
+      if (this.selectedTask && !list.some((t) => t.id === this.selectedTask?.id)) {
+        this.selectedTask = null;
+      }
+    });
 
-  onFilterChange(filter: { text: string; category: string }) {
-    const query = filter.text.toLowerCase().trim();
-    this.filteredTasks = this.tasks.filter(task => {
-      const matchesText = task.titol.toLowerCase().includes(query) ||
-      task.descripcio.toLowerCase().includes(query);
-      const matchesCategory = filter.category ? task.categoria === filter.category : true;
-      return matchesText && matchesCategory;
+    this.taskService.loading$.subscribe((loading) => {
+      this.isLoading = loading;
+    });
+
+    this.taskService.error$.subscribe((err) => {
+      this.errorMessage = err;
     });
   }
 
-  onResetFilter() {
-    this.filteredTasks = this.tasks;
+  onFilterChange(criteria: SearchCriteria): void {
+    this.taskService.search(criteria);
+  }
+
+  onResetFilter(): void {
+    this.taskService.search({ text: '', category: '' });
+    this.selectedTask = null;
+  }
+
+  onTaskCreated(): void {
+    this.taskService.retryLastQuery();
+  }
+
+  onRetry(): void {
+    this.taskService.retryLastQuery();
+  }
+
+  selectTask(task: Task): void {
+    this.selectedTask = task;
   }
 }

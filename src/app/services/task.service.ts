@@ -83,7 +83,7 @@ export class TaskService {
   }
 
   hasMatchingTasksAsync(term: string): Observable<boolean> {
-    const cleanTerm = term.trim().toLowerCase();
+    const cleanTerm = this.normalizeKey(term);
     if (!cleanTerm) {
       return of(true);
     }
@@ -93,9 +93,9 @@ export class TaskService {
                                                             map((tasks) =>
                                                             tasks.some(
                                                               (t) =>
-                                                              t.titol.toLowerCase().includes(cleanTerm) ||
-                                                              t.descripcio.toLowerCase().includes(cleanTerm) ||
-                                                              t.categoria.toLowerCase().includes(cleanTerm)
+                                                              this.normalizeKey(t.titol).includes(cleanTerm) ||
+                                                              this.normalizeKey(t.descripcio).includes(cleanTerm) ||
+                                                              this.normalizeKey(t.categoria).includes(cleanTerm)
                                                             )
                                                             ),
                                                             catchError(() => of(true))
@@ -108,7 +108,7 @@ export class TaskService {
 
     let params = new HttpParams();
     if (criteria.category && criteria.category.trim().length > 0) {
-      params = params.set('category', criteria.category.trim().toLowerCase());
+      params = params.set('category', this.normalizeKey(criteria.category));
     }
 
     return this.http.get<TaskApiDto[]>(TASKS_ENDPOINT, { params }).pipe(
@@ -121,7 +121,7 @@ export class TaskService {
                                                                           this.tasksSubject.next(filtered);
                                                                           this.loadingSubject.next(false);
                                                                         }),
-                                                                        catchError((err) => {
+                                                                        catchError(() => {
                                                                           this.loadingSubject.next(false);
                                                                           this.errorSubject.next('Error en comunicar amb l’API local. Comprova que json-server està en marxa.');
                                                                           return of([]);
@@ -130,17 +130,25 @@ export class TaskService {
   }
 
   private applyClientFilters(tasks: Task[], criteria: SearchCriteria): Task[] {
-    const query = criteria.text.trim().toLowerCase();
-    const categoryFilter = criteria.category.trim().toLowerCase();
+    const query = this.normalizeKey(criteria.text);
+    const categoryFilter = this.normalizeKey(criteria.category);
 
     return tasks.filter((task) => {
       const matchesText =
       !query ||
-      task.titol.toLowerCase().includes(query) ||
-      task.descripcio.toLowerCase().includes(query);
+      this.normalizeKey(task.titol).includes(query) ||
+      this.normalizeKey(task.descripcio).includes(query);
       const matchesCategory =
-      !categoryFilter || task.categoria.toLowerCase() === categoryFilter;
+      !categoryFilter || this.normalizeKey(task.categoria) === categoryFilter;
       return matchesText && matchesCategory;
     });
+  }
+
+  private normalizeKey(value: string): string {
+    return value
+    .trim()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
   }
 }
