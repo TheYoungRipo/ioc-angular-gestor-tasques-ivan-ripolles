@@ -1,0 +1,104 @@
+{
+  "tasks": [
+    {
+      "id": "1",
+      "title": "  Dissenyar interfície Angular  ",
+      "description": "Crear els components base i estructurar el layout amb SCSS.",
+      "category": "desenvolupament",
+      "status": "en-curs",
+      "dueDate": "2026-11-10",
+      "estimatedHours": 4,
+      "featured": true
+    },
+    {
+      "id": "2",
+      "title": "Configurar rutes i navegació",
+      "description": "Establir el sistema de rutes standalone per al gestor de tasques.",
+      "category": "desenvolupament",
+      "status": "pendent",
+      "dueDate": "2026-11-11",
+      "estimatedHours": 3,
+      "featured": false
+    },
+    {
+      "id": "3",
+      "title": "Implementar formulari reactiu",
+      "description": "Afegir ReactiveFormsModule, validacions i debounce.",
+      "category": "formularis",
+      "status": "en-curs",
+      "dueDate": "2026-11-12",
+      "estimatedHours": 5,
+      "featured": true
+    },
+    {
+      "id": "4",
+      "title": "Optimitzar consum HTTP",
+      "description": "Revisar subscripcions i fluxos amb switchMap.",
+      "category": "optimitzacio",
+      "status": "pendent",
+      "dueDate": "2026-11-13",
+      "estimatedHours": 2,
+      "featured": false
+    },
+    {
+      "id": "5",
+      "title": "Escriure proves unitàries",
+      "description": "Comprovar serveis i components amb npm test.",
+      "category": "qualitat",
+      "status": "pendent",
+      "dueDate": "2026-11-14",
+      "estimatedHours": 6,
+      "featured": false
+    },
+    {
+      "id": "6",
+      "title": "Documentar models i adaptadors",
+      "description": "Completar docs/models.md amb el mapatge API -> model intern.",
+      "category": "documentacio",
+      "status": "completada",
+      "dueDate": "2026-11-15",
+      "estimatedHours": 2,
+      "featured": true
+    },
+    {
+      "id": "7",
+      "title": "Documentar serveis HTTP",
+      "description": "Redactar docs/serveis.md amb GET, POST, estats i switchMap.",
+      "category": "documentacio",
+      "status": "pendent",
+      "dueDate": "2026-11-16",
+      "estimatedHours": 2,
+      "featured": false
+    },
+    {
+      "id": "8",
+      "title": "Documentar formularis reactius",
+      "description": "Redactar docs/formularis.md i historial a localStorage.",
+      "category": "documentacio",
+      "status": "pendent",
+      "dueDate": "2026-11-17",
+      "estimatedHours": 3,
+      "featured": true
+    },
+    {
+      "id": "9",
+      "title": "Revisar accessibilitat i estats",
+      "description": "Verificar role=status, role=alert, aria-live i focus visible.",
+      "category": "accessibilitat",
+      "status": "pendent",
+      "dueDate": "2026-11-18",
+      "estimatedHours": 3,
+      "featured": false
+    },
+    {
+      "id": "10",
+      "title": "Preparar lliurament final ODT",
+      "description": "Comprovar captures, commit final i branca ra3-serveis.",
+      "category": "lliurament",
+      "status": "pendent",
+      "dueDate": "2026-11-24",
+      "estimatedHours": 2,
+      "featured": true
+    }
+  ]
+}
