@@ -1,23 +1,26 @@
-<form #filterForm="ngForm" (ngSubmit)="onApplyFilter()" class="filter-form">
+<form [formGroup]="filterForm" (ngSubmit)="onApplyFilter()" class="filter-form" novalidate>
   <div class="form-group">
     <label for="searchText">Cercar per text:</label>
     <input
       type="text"
       id="searchText"
-      name="searchText"
-      [(ngModel)]="searchText"
-      required
-      minlength="2"
-      #searchModel="ngModel"
+      formControlName="searchText"
       placeholder="Escriu mínim 2 caràcters..."
-    >
-    @if (searchModel.invalid && (searchModel.dirty || searchModel.touched)) {
+    />
+
+    @if (filterForm.controls.searchText.pending) {
+      <p class="hint-message" role="status" aria-live="polite">
+        Comprovant coincidències a l'API...
+      </p>
+    }
+
+    @if (filterForm.controls.searchText.invalid && (filterForm.controls.searchText.dirty || filterForm.controls.searchText.touched)) {
       <div class="error-message" role="alert">
-        @if (searchModel.errors?.['required']) {
-          <span>El camp de cerca és obligatori.</span>
+        @if (filterForm.controls.searchText.hasError('minlength')) {
+          <span>El text de cerca ha de tenir com a mínim 2 caràcters.</span>
         }
-        @if (searchModel.errors?.['minlength']) {
-          <span>El text ha de tenir com a mínim 2 caràcters.</span>
+        @if (filterForm.controls.searchText.hasError('noApiMatches')) {
+          <span>Cap element a l'API coincideix amb aquest terme de cerca.</span>
         }
       </div>
     }
@@ -25,10 +28,7 @@
 
   <div class="form-group">
     <label for="category">Categoria:</label>
-    <select
-      id="category"
-      name="category"
-      [(ngModel)]="selectedCategory">
+    <select id="category" formControlName="category">
       <option value="">Totes les categories</option>
       @for (cat of categories; track cat) {
         <option [value]="cat">{{ cat }}</option>
@@ -41,7 +41,53 @@
       Aplicar Filtres
     </button>
     <button type="button" (click)="onResetFilter()" class="btn-secondary">
-      Restablir
+      Netejar cerca
     </button>
   </div>
+
+  @if (history.length > 0) {
+    <div class="history-box" aria-label="Historial de cerques">
+      <span class="history-label">Historial recent:</span>
+      <div class="history-chips">
+        @for (term of history; track term) {
+          <button type="button" class="history-chip" (click)="selectFromHistory(term)">
+            {{ term }}
+          </button>
+        }
+      </div>
+    </div>
+  }
+
+  @if (storageWarning) {
+    <p class="error-message" role="alert">{{ storageWarning }}</p>
+  }
 </form>
+
+<details class="create-panel">
+  <summary>Afegir nova tasca a l'API (POST)</summary>
+  <form [formGroup]="createForm" (ngSubmit)="onCreateTask()" class="create-form">
+    <div class="form-group">
+      <label for="newTaskTitle">Títol:</label>
+      <input id="newTaskTitle" type="text" formControlName="titol" placeholder="Títol de la tasca" />
+    </div>
+    <div class="form-group">
+      <label for="newTaskCategory">Categoria:</label>
+      <select id="newTaskCategory" formControlName="categoria">
+        @for (cat of categories; track cat) {
+          <option [value]="cat">{{ cat }}</option>
+        }
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="newTaskDate">Data límit:</label>
+      <input id="newTaskDate" type="date" formControlName="data" />
+    </div>
+    <div class="form-group">
+      <label for="newTaskHours">Hores:</label>
+      <input id="newTaskHours" type="number" formControlName="hores" min="1" />
+    </div>
+    <button type="submit" [disabled]="createForm.invalid" class="btn-primary">
+      Crear tasca
+    </button>
+  </form>
+</details>

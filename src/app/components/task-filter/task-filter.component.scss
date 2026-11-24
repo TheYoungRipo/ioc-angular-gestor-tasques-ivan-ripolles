@@ -14,29 +14,34 @@
       color: #334155;
     }
 
-    input, select {
+    input,
+    select {
       padding: 0.5rem;
       border: 1px solid #cbd5e1;
       border-radius: 4px;
       font-size: 0.95rem;
+      background-color: #ffffff;
+    }
 
-      &:focus {
-        outline: 2px solid #2563eb;
-        outline-offset: 1px;
-      }
+    .hint-message {
+      margin: 0.2rem 0 0;
+      color: #1d4ed8;
+      font-size: 0.85rem;
     }
 
     .error-message {
-      color: #dc2626;
-      font-size: 0.8rem;
+      color: #b91c1c;
+      font-size: 0.85rem;
+      font-weight: 600;
       margin-top: 0.2rem;
     }
   }
 
   .form-actions {
     display: flex;
-    gap: 1rem;
-    margin-top: 0.5rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
 
     button {
       padding: 0.5rem 1rem;
@@ -47,7 +52,7 @@
 
       &.btn-primary {
         background-color: #2563eb;
-        color: white;
+        color: #ffffff;
 
         &:disabled {
           background-color: #94a3b8;
@@ -66,6 +71,96 @@
         &:hover {
           background-color: #cbd5e1;
         }
+      }
+    }
+  }
+
+  .history-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #e2e8f0;
+
+    .history-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #475569;
+    }
+
+    .history-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .history-chip {
+      padding: 0.25rem 0.65rem;
+      font-size: 0.85rem;
+      border-radius: 999px;
+      border: 1px solid #cbd5e1;
+      background-color: #ffffff;
+      color: #1e293b;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #eff6ff;
+        border-color: #2563eb;
+      }
+    }
+  }
+}
+
+.create-panel {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed #cbd5e1;
+
+  summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: #1e3a8a;
+  }
+
+  .create-form {
+    margin-top: 0.75rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.75rem;
+    align-items: end;
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+
+      label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #334155;
+      }
+
+      input,
+      select {
+        padding: 0.45rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 4px;
+        background-color: #ffffff;
+      }
+    }
+
+    button {
+      padding: 0.5rem 0.9rem;
+      border: none;
+      border-radius: 4px;
+      background-color: #2563eb;
+      color: #ffffff;
+      font-weight: 600;
+      cursor: pointer;
+
+      &:disabled {
+        background-color: #94a3b8;
+        cursor: not-allowed;
       }
     }
   }
