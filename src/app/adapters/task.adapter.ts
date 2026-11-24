@@ -12,21 +12,22 @@ const CATEGORY_LABELS: Record<string, string> = {
 };
 
 export function adaptTaskFromApi(dto: TaskApiDto): Task {
-  const rawTitle = (dto.title ?? '').trim();
-  const rawDescription = (dto.description ?? '').trim();
-  const rawCategoryKey = (dto.category ?? 'general').trim().toLowerCase();
-  const rawStatus = (dto.status ?? 'pendent').trim();
-  const rawDate = (dto.dueDate ?? '2026-11-01').trim();
+  const rawTitle = typeof dto?.title === 'string' ? dto.title.trim() : '';
+  const rawDescription = typeof dto?.description === 'string' ? dto.description.trim() : '';
+  const rawCategoryKey =
+  typeof dto?.category === 'string' ? dto.category.trim().toLowerCase() : 'general';
+  const rawStatus = typeof dto?.status === 'string' ? dto.status.trim() : 'pendent';
+  const rawDate = typeof dto?.dueDate === 'string' ? dto.dueDate.trim() : '2026-11-01';
 
-  const parsedId = Number(dto.id);
+  const parsedId = Number(dto?.id);
   const safeId = Number.isFinite(parsedId) && parsedId > 0 ? parsedId : Date.now();
 
-  const parsedHours = Number(dto.estimatedHours);
+  const parsedHours = Number(dto?.estimatedHours);
   const safeHours = Number.isFinite(parsedHours) && parsedHours >= 0 ? parsedHours : 1;
 
   const normalizedDate = /^\d{4}-\d{2}-\d{2}$/.test(rawDate)
   ? `${rawDate}T09:00:00`
-  : rawDate;
+  : rawDate || '2026-11-01T09:00:00';
 
   return {
     id: safeId,
@@ -36,7 +37,7 @@ export function adaptTaskFromApi(dto: TaskApiDto): Task {
     estat: rawStatus.length > 0 ? rawStatus : 'pendent',
     data: normalizedDate,
     hores: safeHours,
-    destacada: Boolean(dto.featured)
+    destacada: Boolean(dto?.featured)
   };
 }
 
@@ -44,7 +45,7 @@ export function adaptTaskListFromApi(dtos: TaskApiDto[]): Task[] {
   if (!Array.isArray(dtos)) {
     return [];
   }
-  return dtos.map(adaptTaskFromApi);
+  return dtos.map((dto) => adaptTaskFromApi(dto));
 }
 
 export function adaptTaskToApiPayload(input: {
@@ -55,15 +56,14 @@ export function adaptTaskToApiPayload(input: {
   hores: number;
   destacada?: boolean;
 }): CreateTaskPayload {
-  const categoryKey = input.categoria.trim().toLowerCase();
-  const cleanDate = input.data.trim().slice(0, 10) || '2026-11-20';
-  const safeHours = Number.isFinite(Number(input.hores)) && Number(input.hores) >= 0
-  ? Number(input.hores)
-  : 1;
+  const categoryKey = (input.categoria ?? '').trim().toLowerCase();
+  const cleanDate = (input.data ?? '').trim().slice(0, 10) || '2026-11-20';
+  const parsedHours = Number(input.hores);
+  const safeHours = Number.isFinite(parsedHours) && parsedHours >= 0 ? parsedHours : 1;
 
   return {
-    title: input.titol.trim(),
-    description: input.descripcio.trim() || 'Sense descripció disponible.',
+    title: (input.titol ?? '').trim(),
+    description: (input.descripcio ?? '').trim() || 'Sense descripció disponible.',
     category: categoryKey || 'desenvolupament',
     status: 'pendent',
     dueDate: cleanDate,

@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { BehaviorSubject, Observable, catchError, map, of, switchMap, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, finalize, map, of, switchMap, tap, throwError } from 'rxjs';
 import { TASKS_ENDPOINT } from '../config/api.config';
 import { Task } from '../models/task.model';
 import { TaskApiDto } from '../models/task-api.model';
@@ -72,12 +72,13 @@ export class TaskService {
                                                                       const updatedAll = [...this.allTasksSubject.value, createdTask];
                                                                       this.allTasksSubject.next(updatedAll);
                                                                       this.tasksSubject.next(this.applyClientFilters(updatedAll, this.lastCriteria));
-                                                                      this.loadingSubject.next(false);
                                                                     }),
                                                                     catchError((err) => {
-                                                                      this.loadingSubject.next(false);
                                                                       this.errorSubject.next('No s’ha pogut crear la tasca a l’API local.');
                                                                       return throwError(() => err);
+                                                                    }),
+                                                                    finalize(() => {
+                                                                      this.loadingSubject.next(false);
                                                                     })
     );
   }
@@ -119,12 +120,13 @@ export class TaskService {
                                                                           }
                                                                           const filtered = this.applyClientFilters(adaptedTasks, criteria);
                                                                           this.tasksSubject.next(filtered);
-                                                                          this.loadingSubject.next(false);
                                                                         }),
                                                                         catchError(() => {
-                                                                          this.loadingSubject.next(false);
                                                                           this.errorSubject.next('Error en comunicar amb l’API local. Comprova que json-server està en marxa.');
                                                                           return of([]);
+                                                                        }),
+                                                                        finalize(() => {
+                                                                          this.loadingSubject.next(false);
                                                                         })
     );
   }

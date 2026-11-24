@@ -4,6 +4,16 @@
 Ivan Ripolles Cervera
 
 ## Descripció
+Aplicació web Angular amb integració HTTP contra `json-server`, models i adaptadors, formulari reactiu amb validacions síncrones i asíncrones, gestió d'estats de càrrega/error i historial persistent a `localStorage`.
+
+## Versions utilitzades
+- Node.js: 24.x LTS
+- npm: 11.x
+- Angular CLI: 22.x
+- Git: 2.x
+
+
+## Descripció
 Aplicació web desenvolupada amb Angular per a gestionar les tasques diàries, filtrar per text i categoria, i veure el detall de les tasques seleccionades.
 
 ## Versions utilitzades
